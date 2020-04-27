@@ -1,0 +1,12 @@
+#INCLUDE "PROTHEUS.CH"
+#INCLUDE "TOTVS.CH"
+
+User Function TMKR03()
+
+//U_SYTMR003()
+//旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
+//� MODIFICADO A IMPRESSAO DO PEDIDO - PEDIDO GRAFICO - LUIZ EDUARDO F.C. - 17.10.2017 �
+//읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴켸
+U_KMPEDIDO()
+
+Return(.T.)

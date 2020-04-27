@@ -1,0 +1,1088 @@
+#include "rwmake.ch"
+#include "protheus.ch"
+#define DMPAPER_A4 9
+#define DMPAPER_A4SMALL     10          // A4 Small 210 x 297 mm
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณFabio Satoru Yamamotบ Data ณ  14/04/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ Impressao de relatorio customizado para casa cenario.      บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+User Function TMKR03AA(cPedido,nLinProd)
+
+Private wnrel  	:="TMKR03"
+Private aReturn	:= { "Zebrado", 1, "Administracao", 2, 2, 1, "", 1}//OBRIGATORIO PARA O SetPrint
+
+RptStatus({|| reportDef(cPedido,nLinProd)},"Gerando Impressใo")
+
+Return(.T.)
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function ReportDef(cPedido,nLinProd)
+
+Local cAuxRel     	:= ""
+Local cPedPend		:= ""
+
+Private oReport		:= Nil
+Private oFont01 	:= TFont():New( "Arial",15,15,,.T.,,,,,,,,,,,)//titulo
+Private oFont02 	:= TFont():New( "Arial",10,10,,.T.,,,15,,,,,,,,)//descricao negrito
+Private oFont03 	:= TFont():New( "Arial",08,08,,.T.,,,15,,,,,,,,)//descricao
+Private cLocDep		:= GetMv("MV_SYLOCDP",,"100001")
+Private Linha       := 0
+Private nTotVal    	:= 0
+Private cFilAtu		:= If(nLinProd=="1",xFilial("SUA"),cLocDep)
+
+Private nLiquido 	:= 0
+Private nEntrada 	:= 0
+Private nFinanciado := 0
+Private nParcelas	:= 0
+Private nBruto		:= 0
+Private nDesconto	:= 0
+Private aParcelas	:= {}
+Private cFileLogo	:= ""
+
+If nLinProd=="1"
+	cFileLogo := "LOGO_CASA_PRAIA.BMP"
+Else
+	cFileLogo := "LOGO_CASA_URBANO.BMP"
+Endif
+
+oReport:= TMSPrinter():New("Relat๓rio de Pedido de Venda")
+
+If Empty(cPedido)
+	oReport:Cancel()
+End If
+
+oReport:SetPortrait()
+oReport:Setup()
+oReport:SetPaperSize(DMPAPER_A4SMALL)
+oReport:StartPage()
+
+oReport:SayBitmap( 0100,0050,cFileLogo,600,370 )
+
+oReport:Box(0200,0800,500,2350)
+
+dbSelectArea("SM0")
+dbSetOrder(1)
+dbSeek(cEmpAnt+cFilAnt)
+
+//Cabecalho
+oReport:Say(0100,0870,"Pedido de venda Nบ " + Alltrim(cPedido)+" - AT/"+ Alltrim(SUA->UA_NUM) , oFont01)
+oReport:Say(0250,0870,AllTrim (SM0->M0_NOME) ,oFont01)
+
+oReport:Say(0300,0870, AllTrim (SM0->M0_ENDCOB)+SPACE(1)+AllTrim (SM0->M0_COMPCOB),oFont02)
+cEndereco := "- "+Transform(SM0->M0_CEPCOB,"@R 99999-999" )  +" - "+;
+AllTrim (SM0->M0_BAIRCOB ) +" - "+;
+AllTrim (SM0->M0_CIDCOB  ) +" - "+;
+AllTrim (SM0->M0_ESTCOB  )
+oReport:Say(0350,0870,cEndereco,oFont03)
+oReport:Say(0400,0870,"Telefone: ",oFont02)
+oReport:Say(0400,1050,AllTrim (SM0->M0_TEL) ,oFont02) 
+oReport:Say(0450,0870,"E-Mail: ",oFont02)
+Do case
+	Case SM0->M0_CODFIL = "110002"
+		oReport:Say(0450,1050,SUPERGETMV("MV_SYMAIL1", .F., "contato@casacenario.com.br")  ,oFont02)
+	Case SM0->M0_CODFIL = "120003"
+		oReport:Say(0450,1050,SUPERGETMV("MV_SYMAIL2", .F., "contato@casacenario.com.br")  ,oFont02)
+	Case SM0->M0_CODFIL = "130004"
+		oReport:Say(0450,1050,SUPERGETMV("MV_SYMAIL3", .F., "contato@casacenario.com.br")  ,oFont02)
+	OtherWise
+		oReport:Say(0450,1050,"contato@casacenario.com.br",oFont02)
+EndCase
+
+SC5->(DbSetOrder(1))
+SC5->(DbSeek(cFilAtu+cPedido))
+
+SA3->(DbSetOrder(1))
+SA3->(DbSeek(xFilial("SA3")+SC5->C5_VEND1))
+	
+//Coluna 2 SUA
+oReport:Say(0250,1680,"Data do Pedido:",oFont03)
+oReport:Say(0250,1910,DtoC(SC5->C5_EMISSAO),oFont02)
+
+oReport:Say(0350,1680,"Nome do Vendedor: ",oFont03)
+oReport:Say(0350,1910,Substr(SA3->A3_NREDUZ,1,25),oFont02)
+
+cPedPend:= IIf(SUA->UA_PEDPEND=="1","Em Aguardar",If(SUA->UA_PEDPEND=="2","Pendencia Financeira",If(SUA->UA_PEDPEND=="3","Pedido Conferido",If(SUA->UA_PEDPEND=="4","Pedido Normal","Em Aguardar Conferido"))))
+oReport:Say(0450,1680,"Tipo Pedido: ",oFont03)
+oReport:Say(0450,1910,UPPER(cPedPend) ,oFont02) 
+
+nlinha :=500
+
+ProxTabela()
+
+//Cliente
+oReport:Say(nlinha,1100,"Cliente",oFont01)
+PulaLinha()
+oReport:Line( nlinha , 0050 , nlinha , 2350 ) //Linha Cima
+oReport:Line( nlinha , 0050 , nlinha+250 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha , 2350 , nlinha+250 , 2350 ) //Linha Direita
+oReport:Line( nlinha+250 , 0050 , nlinha+250 , 2350 ) //Linha Baixo
+
+SA1->(DbSetOrder(1))
+SA1->(DbSeek(xFilial("SA1")+SC5->C5_CLIENTE+SC5->C5_LOJACLI))
+
+oReport:Say(nlinha,0070,Alltrim(SA1->A1_NOME),oFont01)
+PulaLinha()
+PulaLinha()
+
+cAuxRel := ""
+Do Case
+	Case SA1->A1_PESSOA=="F"
+		cAuxRel += "CPF: "
+		cAuxRel += Transform(SA1->A1_CGC,"@R 999.999.999-99")+ " - "
+	Case SA1->A1_PESSOA=="J"
+		cAuxRel += "CNPJ: "
+		cAuxRel += Transform(SA1->A1_CGC,"@R 99.999.999/9999-99")+ " - "
+End Case
+cAuxRel += SPACE(2)+"RG/Incricao Estadual: "
+cAuxRel += SA1->A1_RG
+oReport:Say(nlinha,0070,cAuxRel,oFont03)
+
+PulaLinha()
+
+cAuxRel := ""
+cAuxRel += "Telefone: "  +  AllTrim(SA1->A1_TEL)+" - "
+cAuxRel += "E-Mail: "    +  AllTrim(SA1->A1_EMAIL)
+oReport:Say(nlinha,0070,cAuxRel,oFont03)
+
+PulaLinha()
+
+cAuxRel := ""
+cAuxRel += AllTrim(SA1->A1_END)+" - "
+cAuxRel += AllTrim(SA1->A1_BAIRRO)+ " - "
+cAuxRel += AllTrim(SA1->A1_MUN)+" - "
+cAuxRel += AllTrim(SA1->A1_EST)+" - "
+cAuxRel += AllTrim(SA1->A1_CEP)
+oReport:Say(nlinha,0070,cAuxRel,oFont03)
+
+CarregaSUB(nLinProd) //Carga da Work_SUB
+CarregaSL4(nLinProd)
+
+QuebraPag()
+ProxTabela()
+IncDadoItem() //Formulario de itens
+
+QuebraPag()
+ProxTabela()
+IncDadoPgt()//Formulario do pagamento
+
+QuebraPag()
+ProxTabela()
+IncValEnt()//Formulario da valor de entreda
+
+QuebraPag()
+ProxTabela()
+IncForParc()//Formulario de parcelamento
+           
+QuebraPag()
+ProxTabela()
+IncDadoEnt()//Formulario da entrega
+
+If !Empty(SC5->C5_VEND2) 
+	QuebraPag()
+	ProxTabela()
+	IncDadoPro() //Formulario do profissional
+Endif
+
+If SUA->UA_01NFP$"1|2"
+	QuebraPag()
+	ProxTabela()
+	ProxTabela()
+	oReport:Line( nlinha         , 0050 , nlinha      , 2350 ) //Linha Cima
+	oReport:Line( nlinha         , 0050 , nlinha+70   , 0050 ) //Linha Esquerda
+	oReport:Line( nlinha         , 2350 , nlinha+70   , 2350 ) //Linha Direita
+	oReport:Line( nlinha+70  	, 0050 , nlinha+70   , 2350 ) //Linha Baixo
+	oReport:Line( nlinha         , 2220 , nlinha+70   , 2220 ) //Linha vertical 7
+	oReport:Say(nlinha+30,0070,"Cliente solicitou nota fiscal paulista?",oFont03)
+	oReport:Say(nlinha+30,2250, If (SUA->UA_01NFP=="1","Sim","Nใo" )  ,oFont03)
+	PulaLinha()
+end If
+
+nlinha :=nlinha+150
+oReport:Line( nlinha , 0050 , nlinha , 1000 ) //Linha da assinatura
+oReport:Say(nlinha,0050,"Assinatura Cliente:",oFont03)
+
+SET DEVICE TO SCREEN
+If aReturn[5]==1
+	dbCommitAll()
+	SET PRINTER TO
+	OurSpool(wnrel)
+Endif
+MS_FLUSH()
+oReport:EndPage()
+oReport:Preview()
+
+WK_SUB->(DBCLOSEAREA())
+WK_SL4->(DBCLOSEAREA())
+
+Return(oReport)
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncDadoItem()
+
+Local cAuxRel	 := ""
+Local nPulaLinha := 0
+Local nPercDesc	 := 0
+Local lQuebra
+
+Local nPosVert1 := 450
+Local nPosVert2 := 1180
+Local nPosVert3 := 1280
+Local nPosVert4 := 1400
+Local nPosVert5 := 1700
+Local nPosVert6 := 1810
+Local nPosVert7 := 2000
+Local nPosVert8 := 2170
+Local nPosVert9	:= 1560
+
+Local nEspaco   := 20
+Local nPosInicio := 50
+//Cabecalho itens
+PulaLinha()
+oReport:Say(nlinha,1100,"Itens",oFont01)
+PulaLinha()
+oReport:Line( nlinha 		, 0050 , nlinha 		, 2350 ) //Linha Cima
+oReport:Line( nlinha 		, 0050 , nlinha+100 	, 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+100 	, 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 	, 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+
+oReport:Say(nlinha+50,nPosInicio+nEspaco,"Produto",oFont02)
+oReport:Say(nlinha+50,nPosVert1+nEspaco,"Descricao",oFont02)
+oReport:Say(nlinha+50,nPosVert2+nEspaco,"Un.",oFont02)
+oReport:Say(nlinha+50,nPosVert3+nEspaco,"Qtde",oFont02)
+oReport:Say(nlinha+22,nPosVert4+nEspaco,"Valor",oFont02)
+oReport:Say(nlinha+53,nPosVert4+nEspaco,"Unitแrio",oFont02)
+oReport:Say(nlinha+50,nPosVert5+15,"% Desc.",oFont02)
+oReport:Say(nlinha+23,nPosVert6+nEspaco,"Valor",oFont02)
+oReport:Say(nlinha+52,nPosVert6+nEspaco,"Total",oFont02)
+oReport:Say(nlinha+23,nPosVert7+nEspaco,"Previsao",oFont02)
+oReport:Say(nlinha+52,nPosVert7+nEspaco,"Entrega",oFont02)
+oReport:Say(nlinha+23,nPosVert8+nEspaco,"Local",oFont02)
+oReport:Say(nlinha+52,nPosVert8+nEspaco,"Saida",oFont02)
+oReport:Say(nlinha+22,nPosVert9+08,"Armazem",oFont02)
+oReport:Say(nlinha+53,nPosVert9+08,"Saida",oFont02)
+
+PulaLinha()
+
+WK_SUB->(dbGoTop())
+While !WK_SUB->(EOF())
+	lQuebra      := .F.
+	oReport:Line( nlinha         , 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+	oReport:Line( nlinha         , 2350 , nlinha+100 , 2350 ) //Linha Direita
+	
+	oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+	oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+	oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+	oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+	oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+	oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+	oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+	oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+	oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+	
+	SB1->(DbSetOrder(1))
+	SB1->(DbSeek(xFilial("SB1")+AVKEY(WK_SUB->UB_PRODUTO,"B1_COD")))
+		
+	oReport:Say(nlinha+50,nPosInicio+nEspaco,WK_SUB->UB_PRODUTO,oFont03)
+	cAux := Alltrim(SB1->B1_DESC)
+	
+	If Len(cAux)  > 40//Esta funcao suportara no maximo 80 caracteres na descricao, caso necessario ajuste os parametros do substr()
+		oReport:Say(nlinha+50,nPosvert1+nEspaco,Substr(cAux,1,40),oFont03)
+		oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+		oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+		oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+		oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+		oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+		oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+		oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+		oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+		oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+		
+		PulaLinha()
+		oReport:Say(nlinha+50,nPosvert1+nEspaco,Substr(cAux,41,80),oFont03)
+		oReport:Line( nlinha+100 , 0050 , nlinha+100 , 2350 ) //Linha Baixo
+		nlinha := nlinha - 50
+		lQuebra := .T.
+	Else
+		oReport:Say(nlinha+50,nPosvert1+nEspaco,cAux ,oFont03)
+		oReport:Line( nlinha+100 , 0050 , nlinha+100 , 2350 ) //Linha Baixo
+	EndIf
+	
+	oReport:Say(nlinha+50,nPosvert2+nEspaco,WK_SUB->UB_UM,oFont03)
+	oReport:Say(nlinha+50,nPosvert3+nEspaco,AllTrim(STR(WK_SUB->UB_QUANT)),oFont03)
+	oReport:Say(nlinha+50,nPosvert4+nEspaco,AllTrim(Transform((WK_SUB->UB_VRUNIT+WK_SUB->UB_VALDESC) 	, avSx3("UB_VRUNIT"  	, 6) )),oFont03)
+	oReport:Say(nlinha+50,nPosvert5+nEspaco,AllTrim(Transform(WK_SUB->UB_DESC 							, avSx3("UB_DESC"		, 6) )),oFont03)
+	oReport:Say(nlinha+50,nPosvert6+nEspaco,AllTrim(Transform((WK_SUB->UB_VLRITEM+WK_SUB->UB_VALDESC) 	, avSx3("UB_VLRITEM"	, 6) )),oFont03)
+	oReport:Say(nlinha+50,nPosvert7+nEspaco,DTOC(WK_SUB->UB_DTENTRE),oFont03)
+	oReport:Say(nlinha+50,nPosvert8+nEspaco-5,SUBSTR(POSICIONE("SM0",1,cEmpAnt+WK_SUB->UB_FILSAI,"M0_FILIAL"),01,09),oFont03)
+	oReport:Say(nlinha+80,nPosvert8+nEspaco-5,SUBSTR(POSICIONE("SM0",1,cEmpAnt+WK_SUB->UB_FILSAI,"M0_FILIAL"),10,09),oFont03)
+	oReport:Say(nlinha+50,nPosvert9+nEspaco,WK_SUB->UB_LOCAL,oFont03)
+		
+	nTotVal 	:= (WK_SUB->UB_VLRITEM+WK_SUB->UB_VALDESC) + nTotVal
+	nDesconto   += WK_SUB->UB_VALDESC
+	WK_SUB->(DbSkip())
+	If lQuebra
+		PulaLinha()
+	End If
+	PulaLinha()
+End Do
+oReport:Line( nlinha  		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha       	, 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+
+oReport:Say(nlinha+50,nPosVert5+nEspaco,"Frete",oFont02)
+oReport:Say(nlinha+50,nPosVert6+nEspaco,AllTrim(Transform( SC5->C5_FRETE , avSx3("UB_VLRITEM", 6) )),oFont03)
+PulaLinha()
+
+oReport:Line( nlinha  		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha       	, 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+
+nVlrMerc  := nTotVal
+nPercDesc := Round((SC5->C5_DESCONT+nDesconto) / nTotVal * 100,2)
+If nPercDesc > 0
+	oReport:Say(nlinha+50,nPosVert1+nEspaco,"Desc.de "+Alltrim(Transform(nPercDesc,"@E 99.99"))+"% - R$ "+AllTrim(Transform( (SC5->C5_DESCONT + nDesconto) , avSx3("UB_VLRITEM", 6) ))+" sobre o R$ "+AllTrim(Transform(nVlrMerc,avSx3("UB_VLRITEM", 6))) ,oFont03)
+Endif
+oReport:Say(nlinha+50,nPosVert5+nEspaco,"Desc.",oFont02)
+oReport:Say(nlinha+50,nPosVert6+nEspaco,AllTrim(Transform( (SC5->C5_DESCONT + nDesconto) , avSx3("UB_VLRITEM", 6) )),oFont03)
+PulaLinha()
+
+nTotVal   := (nTotVal+SC5->C5_FRETE) - (SC5->C5_DESCONT+nDesconto)
+
+oReport:Line( nlinha        , 0050 	, nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha        , 2350 	, nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 	, nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+oReport:Line( nlinha , nPosVert9 , nlinha+100 , nPosVert9 ) //Linha vertical 9
+
+oReport:Say(nlinha+50,nPosVert5+nEspaco,"Total",oFont02)
+oReport:Say(nlinha+50,nPosVert6+nEspaco,AllTrim(Transform(nTotVal , avSx3("UB_VLRITEM", 6) )),oFont03)
+PulaLinha()
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncDadoPgt()
+
+Local i
+Local nPosVert1 := 280
+Local nPosVert2 := 530
+Local nPosVert3 := 780
+Local nPosVert4 := 1030
+Local nPosVert5 := 1280
+Local nPosVert6 := 1530
+Local nPosVert7 := 1780
+Local nPosVert8 := 2030
+Local nEspaco   := 20
+Local nPosInicio := 50
+
+SE4->(DbSetOrder(1))
+SE4->(DbSeek(xFilial("SE4") + SC5->C5_CONDPAG ))
+
+//Pagamento
+PulaLinha()
+oReport:Say(nlinha,1000,"Forma de Pagamento",oFont01)
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 , nlinha 	, 2350 ) //Linha Cima
+oReport:Line( nlinha 		, 0050 , nlinha+100	, 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+100	, 2350 ) //Linha Direita
+oReport:Line( nlinha+100	, 0050 , nlinha+100	, 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+100 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+100 , nPosVert8 ) //Linha vertical 8
+
+oReport:Say(nlinha+50,nPosInicio+nEspaco,"Forma",oFont02)
+oReport:Say(nlinha+50,nPosVert1+nEspaco,"Pedido",oFont02)
+oReport:Say(nlinha+50,nPosVert2+nEspaco,"Entrada",oFont02)
+oReport:Say(nlinha+50,nPosVert3+nEspaco,"Financiado",oFont02)
+oReport:Say(nlinha+50,nPosVert4+nEspaco,"Parcela",oFont02)
+oReport:Say(nlinha+50,nPosVert5+nEspaco,"A Prazo",oFont02)
+oReport:Say(nlinha+50,nPosVert6+nEspaco,"Financeira",oFont02)
+oReport:Say(nlinha+50,nPosVert7+nEspaco,"Plano",oFont02)
+oReport:Say(nlinha+50,nPosVert8+nEspaco,"1 Parcela",oFont02)
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 , nlinha+220 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+220 , 2350 ) //Linha Direita
+oReport:Line( nlinha+220 	, 0050 , nlinha+220 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+220 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+220 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+220 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+220 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+220 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+220 , nPosVert6 ) //Linha vertical 6
+oReport:Line( nlinha , nPosVert7 , nlinha+220 , nPosVert7 ) //Linha vertical 7
+oReport:Line( nlinha , nPosVert8 , nlinha+220 , nPosVert8 ) //Linha vertical 8
+
+WK_SL4->(dbGoTop())
+
+oReport:Say(nlinha+50  ,nPosInicio+nEspaco  ,Substr(SE4->E4_DESCRI,01,12),oFont03)
+oReport:Say(nlinha+80  ,nPosInicio+nEspaco  ,Substr(SE4->E4_DESCRI,13,12),oFont03)
+oReport:Say(nlinha+110 ,nPosInicio+nEspaco  ,Substr(SE4->E4_DESCRI,25,12),oFont03)
+
+oReport:Say(nlinha+50,nPosVert1+nEspaco  ,AllTrim(Transform(nLiquido  					, avSx3("UA_VALBRUT" 	, 6) )) ,oFont03)
+oReport:Say(nlinha+50,nPosVert2+nEspaco  ,AllTrim(Transform(nEntrada 					, avSx3("UA_ENTRADA"	, 6) )) ,oFont03)
+oReport:Say(nlinha+50,nPosVert3+nEspaco  ,AllTrim(Transform(nFinanciado				, avSx3("UA_FINANC"     , 6) )) ,oFont03)
+oReport:Say(nlinha+50,nPosVert4+nEspaco  ,AllTrim(Transform(nParcelas					, avSx3("UA_PARCELA" 	, 6) )) ,oFont03)
+oReport:Say(nlinha+50,nPosVert5+nEspaco  ,AllTrim(Transform(nEntrada+nFinanciado	  	, avSx3("UA_VALBRUT" 	, 6) )) ,oFont03)//A PRAZO
+
+oReport:Say(nlinha+50 ,nPosVert6+nEspaco  ,	Substr(SE4->E4_DESCRI,01,12) ,oFont03) //FINANCEIRA
+oReport:Say(nlinha+80 ,nPosVert6+nEspaco  ,Substr(SE4->E4_DESCRI,13,12) ,oFont03) //FINANCEIRA
+oReport:Say(nlinha+110,nPosVert6+nEspaco  ,Substr(SE4->E4_DESCRI,25,12) ,oFont03) //FINANCEIRA
+//oReport:Say(nlinha+50,nPosVert7+nEspaco  ,POSICIONE("SX5",1, xFilial("SX5")+"24"+WK_SL4->L4_FORMA,"X5_DESCRI" ),oFont03)//PLANO nopado
+
+If !Empty(SC5->C5_EMISSAO) .And. !Empty(WK_SL4->L4_DATA)
+	oReport:Say(nlinha+50,nPosVert8+nEspaco  ,ALLTRIM(STR((WK_SL4->L4_DATA) - (SC5->C5_EMISSAO))) + " Dias",oFont03)//1 PARCELA
+End If
+
+PulaLinha()
+ProxTabela()
+PulaLinha()
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncValEnt()
+
+Local i
+Local nPosVert1 := 200
+Local nPosVert2 := 500
+Local nPosVert3 := 900
+Local nPosVert4 := 1200
+Local nPosVert5 := 1400
+Local nPosVert6 := 2100
+Local nEspaco   := 20
+Local nPosInicio:= 50
+Local cAuxRel 	:= ""
+
+//QUANDO O VALOR DE ENTREDA ESTIVER 0 NAO IRA EXECUTAR O FORMULARIO DE ENTRADA
+If nEntrada == 0
+	Return
+End If
+
+WK_SL4->(dbGoTop())
+//Pagamento
+PulaLinha()
+oReport:Say(nlinha,1000,"Valor de Entrada",oFont01)
+PulaLinha()
+
+oReport:Line( nlinha , 0050 , nlinha , 2350 ) //Linha Cima
+oReport:Line( nlinha , 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha , 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 , 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+
+oReport:Say(nlinha+50,nPosInicio+nEspaco,"Tipo",oFont02)
+oReport:Say(nlinha+50,nPosVert1+nEspaco,"Valor",oFont02)
+oReport:Say(nlinha+50,nPosVert2+nEspaco,"Banco",oFont02)
+oReport:Say(nlinha+50,nPosVert3+nEspaco,"Numero",oFont02)
+oReport:Say(nlinha+50,nPosVert4+nEspaco,"Data",oFont02)
+oReport:Say(nlinha+50,nPosVert5+nEspaco,"Emitario",oFont02)
+oReport:Say(nlinha+50,nPosVert6+nEspaco,"CPF/CNPJ",oFont02)
+
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 	, nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350	, nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 	, nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+oReport:Line( nlinha , nPosVert5 , nlinha+100 , nPosVert5 ) //Linha vertical 5
+oReport:Line( nlinha , nPosVert6 , nlinha+100 , nPosVert6 ) //Linha vertical 6
+
+SL4->(DbSetOrder(1))
+SL4->(DbSeek(xFilial("SL4")+SUA->UA_NUM))
+
+oReport:Say(nlinha+50,nPosInicio+nEspaco,SL4->L4_FORMA ,oFont03)
+oReport:Say(nlinha+50,nPosVert1+nEspaco,AllTrim(Transform(nEntrada , avSx3("UA_ENTRADA", 6) )) ,oFont03)
+If Alltrim(SL4->L4_FORMA)=="CH"
+	
+	oReport:Say(nlinha+50,nPosVert2+nEspaco,WK_SL4->L4_BANCO,oFont03)
+	oReport:Say(nlinha+50,nPosVert3+nEspaco,WK_SL4->L4_NUMDOC,oFont03)
+	oReport:Say(nlinha+50,nPosVert4+nEspaco,DTOC(SL4->L4_DATA),oFont03)
+	oReport:Say(nlinha+50,nPosVert5+nEspaco,Alltrim(SA1->A1_NOME),oFont03)
+	
+	cAuxRel := ""
+	Do Case
+		Case SA1->A1_PESSOA=="F"
+			cAuxRel := Transform(SA1->A1_CGC,"@R 999.999.999-99")
+		Case SA1->A1_PESSOA=="J"
+			cAuxRel := Transform(SA1->A1_CGC,"@R 99.999.999/9999-99")
+	EndCase
+	oReport:Say(nlinha+50,nPosVert6+nEspaco,cAuxRel ,oFont03)
+	
+Endif
+
+PulaLinha()
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncForParc()
+Local i
+Local nPosVert1 := 450
+Local nPosVert2 := 950
+Local nPosVert3 := 1450
+Local nPosVert4 := 1950
+Local nEspaco   := 20
+Local nPosInicio := 50
+
+//Pagamento
+PulaLinha()
+oReport:Say(nlinha,1000,"Forma do Parcelamento",oFont01)
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 , nlinha , 2350 ) //Linha Cima
+oReport:Line( nlinha 		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+
+oReport:Say(nlinha+50,nPosInicio+nEspaco,"Parcela",oFont02)
+oReport:Say(nlinha+50,nPosVert1+nEspaco,"Vencimento",oFont02)
+oReport:Say(nlinha+50,nPosVert2+nEspaco,"Valor",oFont02)
+oReport:Say(nlinha+50,nPosVert3+nEspaco,"Banco",oFont02)
+oReport:Say(nlinha+50,nPosVert4+nEspaco,"Documento",oFont02)
+
+PulaLinha()
+i:=1
+WK_SL4->(dbGoTop())
+While !WK_SL4->(EOF())
+	oReport:Line( nlinha 		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+	oReport:Line( nlinha 		, 2350 , nlinha+100 , 2350 ) //Linha Direita
+	oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+	
+	oReport:Line( nlinha , nPosVert1 , nlinha+100 , nPosVert1 ) //Linha vertical 1
+	oReport:Line( nlinha , nPosVert2 , nlinha+100 , nPosVert2 ) //Linha vertical 2
+	oReport:Line( nlinha , nPosVert3 , nlinha+100 , nPosVert3 ) //Linha vertical 3
+	oReport:Line( nlinha , nPosVert4 , nlinha+100 , nPosVert4 ) //Linha vertical 4
+	
+	oReport:Say(nlinha+50,nPosInicio+nEspaco  ,PADL(i,2,"0")+" - "+ALLTRIM(WK_SL4->L4_FORMA),oFont03)
+	oReport:Say(nlinha+50,nPosVert1+nEspaco  ,DtoC(WK_SL4->L4_DATA) ,oFont03)
+	oReport:Say(nlinha+50,nPosVert2+nEspaco  ,AllTrim(Transform(WK_SL4->L4_VALOR, avSx3("L4_VALOR" ,  6) )) ,oFont03)
+	
+	If ALLTRIM(WK_SL4->L4_FORMA)  $ "CC/CD/FI"
+		oReport:Say(nlinha+50,nPosVert3+nEspaco  ,WK_SL4->L4_ADMINIS ,oFont03)
+		oReport:Say(nlinha+50,nPosVert4+nEspaco  ,WK_SL4->L4_DTVALID+" / "+WK_SL4->L4_NUMAUTO ,oFont03)		
+	ElseIf ALLTRIM(WK_SL4->L4_FORMA)  $ "CH"
+		oReport:Say(nlinha+50,nPosVert3+nEspaco  ,WK_SL4->L4_BANCO ,oFont03)
+		oReport:Say(nlinha+50,nPosVert4+nEspaco  ,WK_SL4->L4_NUMDOC ,oFont03)
+	End If
+	PulaLinha()
+	i := i+1
+	WK_SL4->(dbSkip())
+End Do
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncDadoPro()
+
+Local cEmail := ""
+
+PulaLinha()
+oReport:Say(nlinha,1050,"Profissional",oFont01)
+
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 , nlinha , 2350 ) //Linha Cima
+oReport:Line( nlinha 		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , 900 	, nlinha+100 , 900 ) //Linha vertical 1
+oReport:Line( nlinha , 1250	, nlinha+100 , 1250 ) //Linha vertical 2
+
+oReport:Say(nlinha+50,0090,"Nome"    ,oFont02)
+oReport:Say(nlinha+50,0930,"Telefone",oFont02)
+oReport:Say(nlinha+50,1280,"E-Mail"    ,oFont02)
+
+PulaLinha()
+
+oReport:Line( nlinha 		, 0050 , nlinha+100 , 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+100 , 2350 ) //Linha Direita
+oReport:Line( nlinha+100 	, 0050 , nlinha+100 , 2350 ) //Linha Baixo
+
+oReport:Line( nlinha , 900 	, nlinha+100 , 900 ) //Linha vertical 1
+oReport:Line( nlinha , 1250	, nlinha+100 , 1250 ) //Linha vertical 2
+
+SA3->(DbSetOrder(1))
+SA3->(DbSeek(xFilial("SA3")+SC5->C5_VEND2))
+
+oReport:Say(nlinha+50,0090,Alltrim(SA3->A3_NOME),oFont03)
+oReport:Say(nlinha+50,0930,SA3->A3_TEL,oFont03)
+
+cEmail := SubStr(SA3->A3_EMAIL,1,50)
+oReport:Say(nlinha+50,1280,cEmail,oFont03)
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function CarregaSUB(nLinProd)
+
+Local cFileWork
+Local aEstrutura:= {}
+
+AAdd(aEstrutura, {"UB_PRODUTO"  	, AVSX3("UB_PRODUTO",2) 	, AVSX3("UB_PRODUTO",3)		, AVSX3("UB_PRODUTO",4)	})
+AAdd(aEstrutura, {"UB_UM"          	, AVSX3("UB_UM",2) 			, AVSX3("UB_UM",3)			, AVSX3("UB_UM",4)		})
+AAdd(aEstrutura, {"UB_QUANT"       	, AVSX3("UB_QUANT",2) 		, AVSX3("UB_QUANT",3)		, AVSX3("UB_QUANT",4)	})
+AAdd(aEstrutura, {"UB_VRUNIT"     	, AVSX3("UB_VRUNIT",2) 		, AVSX3("UB_VRUNIT",3)		, AVSX3("UB_VRUNIT",4)	})
+AAdd(aEstrutura, {"UB_DESC"       	, AVSX3("UB_DESC",2) 		, AVSX3("UB_DESC",3)		, AVSX3("UB_DESC",4)	})
+AAdd(aEstrutura, {"UB_VLRITEM"    	, AVSX3("UB_VLRITEM",2) 	, AVSX3("UB_VLRITEM",3)		, AVSX3("UB_VLRITEM",4)	})
+AAdd(aEstrutura, {"UB_DTENTRE"  	, AVSX3("UB_DTENTRE",2) 	, AVSX3("UB_DTENTRE",3)		, AVSX3("UB_DTENTRE",4)	})
+AAdd(aEstrutura, {"UB_FILSAI"      	, AVSX3("UB_FILSAI",2) 		, AVSX3("UB_FILSAI",3)		, AVSX3("UB_FILSAI",4)	})
+AAdd(aEstrutura, {"UB_VALDESC"     	, AVSX3("UB_VALDESC",2) 	, AVSX3("UB_VALDESC",3)		, AVSX3("UB_VALDESC",4)	})
+AAdd(aEstrutura, {"UB_LOCAL"      	, AVSX3("UB_LOCAL",2) 		, AVSX3("UB_LOCAL",3)		, AVSX3("UB_LOCAL",4)	})
+
+cFileWork := CriaTrab(aEstrutura,.T.)
+dbUseArea(.T.,,cFileWork,"WK_SUB",.F.)
+
+SUB->(DbSetOrder(1))
+SUB->(dbSeek(xFilial("SUA")+AvKey(SUA->UA_NUM,"UB_NUM")))
+While !SUB->(EOF()) .And. SUB->UB_FILIAL+SUB->UB_NUM==xFilial("SUA")+SUA->UA_NUM
+	If SUB->UB_XFORFAT == nLinProd
+		WK_SUB->(RecLock("WK_SUB",.T.))
+		AvReplace("SUB","WK_SUB")
+		WK_SUB->(MsUnlock())
+	Endif
+	SUB->(dbSkip())
+End Do
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function IncDadoEnt()
+
+Local cEndereco := ""
+Local cObs 		:= MSMM(SUA->UA_CODOBS,TamSx3("UA_OBS")[1])
+Local cObs1		:= ""
+
+If SUA->UA_PEDPEND=="1" .Or. SUA->UA_PEDPEND=="5"
+	cObs1 += GetMv("MV_SYMENPA",,"Entrega em Aguardar - O cliente deverแ solicitar entrega com 45 (quarenta e cinco) dias de anteced๊ncia, conforme clแusula 4.1 do Contrato de Compra e Venda.")
+	//Entrega em Aguardar - O cliente deverแ solicitar entrega com 45 (quarenta e cinco) dias de anteced๊ncia, conforme clแusula 4.1 do Contrato de Compra e Venda.
+	//0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+	//          10        20        30        40        50        60        70        80        90        100       110       120       130       140       150       160       170       180
+Endif
+
+PulaLinha()
+oReport:Say(nlinha,1000,"Dados para Entrega",oFont01)
+PulaLinha()
+oReport:Line( nlinha 		, 0050 , nlinha 	, 2350 ) //Linha Cima
+oReport:Line( nlinha 		, 0050 , nlinha+320	, 0050 ) //Linha Esquerda
+oReport:Line( nlinha 		, 2350 , nlinha+320	, 2350 ) //Linha Direita
+oReport:Line( nlinha+320 	, 0050 , nlinha+320	, 2350 ) //Linha Baixo
+
+SA1->(DbSetOrder(1))
+SA1->(DbSeek(xFilial("SA1") + SC5->C5_CLIENTE+SC5->C5_LOJACLI ))
+lEndEnt := !Empty(SA1->A1_ENDENT)
+
+If lEndEnt
+	oReport:Say(nlinha,0080,SA1->A1_ENDENT,oFont03)
+	PulaLinha()
+	cEndereco := AllTrim(SA1->A1_BAIRROE) + Space(1) +"-"+Space(1)+;
+	AllTrim(SA1->A1_MUNE) + Space(1) +"-"+Space(1)+;
+	AllTrim(SA1->A1_ESTE) + Space(1) +"-"+Space(1)+;
+	"Cep: " +AllTrim(SA1->A1_CEPE)
+Else
+	oReport:Say(nlinha,0080,SA1->A1_END,oFont03)
+	PulaLinha()
+	cEndereco := AllTrim(SA1->A1_BAIRRO) + Space(1) +"-"+Space(1)+;
+	AllTrim(SA1->A1_MUN) + Space(1) +"-"+Space(1)+;
+	AllTrim(SA1->A1_EST) + Space(1) +"-"+Space(1)+;
+	"Cep: " +AllTrim(SA1->A1_CEP)
+Endif
+oReport:Say(nlinha,0080,cEndereco,oFont03)
+PulaLinha()
+oReport:Say(nlinha,0080,"Referencia: "+AllTrim(SA1->A1_COMPLEM),oFont03)
+PulaLinha()
+
+//oReport:Say(nlinha,0080,"Observa็๕es: "+cObs,oFont03)
+oReport:Say(nlinha,0080,"Observa็๕es: ",oFont03)
+PulaLinha()
+nNumLin := MlCount(AllTrim(cObs), 100)
+For nI := 1 To nNumLin
+	oReport:Say(nlinha,0080,MemoLine(AllTrim(cObs),100, nI),oFont03)
+	nlinha+=20
+Next nI
+
+oReport:Say(nlinha,0080,Substr(cObs1,1,104),oFont02,,CLR_HRED)
+PulaLinha()
+oReport:Say(nlinha,0080,Substr(cObs1,105,Len(cObs1)),oFont02,,CLR_HRED)
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function CarregaProf()
+
+Local cFileWork
+Local   aEstrutura:= {}
+
+AAdd(aEstrutura, {"A3_NOME"   	, AVSX3("A3_NOME",2) 	, AVSX3("A3_NOME",3)	, AVSX3("A3_NOME"    ,4)})
+AAdd(aEstrutura, {"A3_DDDTEL"  	, AVSX3("A3_DDDTEL",2) 	, AVSX3("A3_DDDTEL",3)	, AVSX3("A3_DDDTEL",4)})
+AAdd(aEstrutura, {"A3_TEL"     	, AVSX3("A3_TEL",2) 	, AVSX3("A3_TEL",3)		, AVSX3("A3_TEL"        ,4)})
+AAdd(aEstrutura, {"A3_EMAIL"   	, AVSX3("A3_EMAIL",2) 	, AVSX3("A3_EMAIL",3)	, AVSX3("A3_EMAIL"     ,4)})
+
+//SUA para SA3
+cFileWork := CriaTrab(aEstrutura,.T.)
+dbUseArea(.T.,,cFileWork,"WK_SA3",.F.)
+
+SA3->(DbSetOrder(1))
+SA3->(dbSeek(xFilial("SA3")+AvKey(SC5->C5_VEND1,"A3_NUM")))
+While !SA3->(EOF()) .And. SA3->A3_FILIAL+SA3->A3_NUM == xFilial("SA3")+SUA->UA_VEND
+	WK_SA3->(RecLock("WK_SA3",.T.))
+	AvReplace("SUB","WK_SA3")
+	WK_SA3->(MsUnlock())
+	SA3->(dbSkip())
+End Do
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function CarregaSL4(nLinProd)//formulario de entrada
+
+Local cFileWork
+Local aEstrutura:= {}
+Local nCont		:= 0
+Local nResto	:= 0
+Local lLinhaUrb	:= (Empty(SUA->UA_NUMSC5) .And. !Empty(SUA->UA_PEDLIN2))
+
+//If (lLinhaUrb .And. lCheque)
+//	nLinProd := "1"	
+//Endif
+
+AAdd(aEstrutura, {"L4_FORMA"   		, AVSX3("L4_FORMA",2)	, AVSX3("L4_FORMA",3)	, AVSX3("L4_FORMA",4)}) //TIPO
+AAdd(aEstrutura, {"L4_VALOR"    	, AVSX3("L4_VALOR",2) 	, AVSX3("L4_VALOR",3)	, AVSX3("L4_VALOR"    ,4)})//VALOR
+AAdd(aEstrutura, {"L4_BANCO"   		, "C" , 3, 0}) //BANCO (NOME DO BANCO)
+AAdd(aEstrutura, {"L4_AGENCIA"		, "C" , 5, 0}) //NUMERO (NOME DO BANCO)
+AAdd(aEstrutura, {"L4_NUMDOC"		, "C" , 16, 0}) //NUMERO (NOME DO BANCO)
+AAdd(aEstrutura, {"L4_DATA" 		, AVSX3("L4_DATA",2)	, AVSX3("L4_DATA",3)	, AVSX3("L4_DATA",4)}) //DATA
+AAdd(aEstrutura, {"L4_RG"     		, AVSX3("L4_RG",2) 		, AVSX3("L4_RG",3)		, AVSX3("L4_RG",4)})
+AAdd(aEstrutura, {"L4_CGC"  		, AVSX3("L4_CGC",2) 	, AVSX3("L4_CGC",3)		, AVSX3("L4_CGC",4)}) //CNPJ
+AAdd(aEstrutura, {"L4_ADMINIS"  	, AVSX3("L4_ADMINIS",2)	, AVSX3("L4_ADMINIS",3)	, AVSX3("L4_ADMINIS",4)})
+AAdd(aEstrutura, {"L4_DTVALID"		, "C" , 08, 0}) //NUMERO (NOME DO BANCO)
+AAdd(aEstrutura, {"L4_NUMAUTO"		, "C" , 06, 0}) //NUMERO (NOME DO BANCO)
+
+cFileWork := CriaTrab(aEstrutura,.T.)
+dbUseArea(.T.,,cFileWork,"WK_SL4",.F.)
+                                           	
+SL4->(DbSetOrder(1))
+SL4->(dbSeek(xFilial("SL4")+AvKey(SUA->UA_NUM,"L4_NUM")))
+While !SL4->(EOF()) .And. SL4->L4_FILIAL==xFilial("SL4") .And. SL4->L4_NUM==SUA->UA_NUM .AND. "SIGATMK"==Alltrim(SL4->L4_ORIGEM)
+
+	cDetalhe 	:= SL4->L4_OBS
+	cComboAdm 	:=Substr(cDetalhe,1,AT("*",cDetalhe)-1)
+	cCartao 	:=Substr(cDetalhe,AT("*",cDetalhe)+1,16)
+	dDtValid	:=Substr(cDetalhe,AT("*",cDetalhe)+18,11)
+	cAutor 	 	:=Substr(cDetalhe,AT("*",cDetalhe)+20+9,6)
+	cCheque 	:= Substr(cDetalhe,19,15)
+		
+	If SL4->L4_XFORFAT == nLinProd
+		
+		WK_SL4->(RecLock("WK_SL4",.T.))
+		WK_SL4->L4_DATA  	:= SL4->L4_DATA
+		WK_SL4->L4_FORMA  	:= SL4->L4_FORMA
+		WK_SL4->L4_VALOR   	:= SL4->L4_VALOR
+		WK_SL4->L4_RG       := SL4->L4_RG
+		WK_SL4->L4_CGC    	:= SL4->L4_CGC
+		WK_SL4->L4_ADMINIS 	:= SL4->L4_ADMINIS
+		WK_SL4->L4_BANCO   	:= SUBSTR(SL4->L4_OBS,1,3)
+		WK_SL4->L4_AGENCIA 	:= SUBSTR(SL4->L4_OBS,4,8)
+		WK_SL4->L4_NUMDOC 	:= If(Alltrim(SL4->L4_FORMA)=="CH",cCheque,cCartao)  //SUBSTR(SL4->L4_OBS,19,25)
+		WK_SL4->L4_DTVALID	:= dDtValid //SUBSTR(SL4->L4_OBS,27,8) 
+		WK_SL4->L4_NUMAUTO	:= cAutor	//SUBSTR(SL4->L4_OBS,38,6)		
+		WK_SL4->(MsUnlock()) 		
+		nLiquido += SL4->L4_VALOR		
+		AAdd(aParcelas , { SL4->L4_DATA , SL4->L4_VALOR , SL4->L4_FORMA } )
+		
+	ElseIf lLinhaUrb
+	
+		WK_SL4->(RecLock("WK_SL4",.T.))
+		WK_SL4->L4_DATA  	:= SL4->L4_DATA
+		WK_SL4->L4_FORMA  	:= SL4->L4_FORMA
+		WK_SL4->L4_VALOR   	:= SL4->L4_VALOR
+		WK_SL4->L4_RG      	:= SL4->L4_RG
+		WK_SL4->L4_CGC    	:= SL4->L4_CGC
+		WK_SL4->L4_ADMINIS 	:= SL4->L4_ADMINIS
+		WK_SL4->L4_BANCO   	:= SUBSTR(SL4->L4_OBS,1,3)
+		WK_SL4->L4_AGENCIA 	:= SUBSTR(SL4->L4_OBS,4,8)
+		WK_SL4->L4_NUMDOC 	:= If(Alltrim(SL4->L4_FORMA)=="CH",cCheque,cCartao) 	//SUBSTR(SL4->L4_OBS,19,25)
+		WK_SL4->L4_DTVALID	:= dDtValid //SUBSTR(SL4->L4_OBS,27,8) 
+		WK_SL4->L4_NUMAUTO	:= cAutor	//SUBSTR(SL4->L4_OBS,38,6)		
+		WK_SL4->(MsUnlock()) 		
+		nLiquido += SL4->L4_VALOR		
+		AAdd(aParcelas , { SL4->L4_DATA , SL4->L4_VALOR , SL4->L4_FORMA } )
+		
+	Endif
+	
+	SL4->(dbSkip())
+End
+
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณPega o total da parcela.ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+nParcelas 	  := Len(aParcelas)
+nTotalParcela := 0
+For nCont:=1 To nParcelas
+	nTotalParcela += Round(aParcelas[nCont][2],2)
+Next nCont
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Carrega a Entrada										ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+nEntrada := 0
+For nCont := 1 To nParcelas
+	If aParcelas[nCont][1] == dDataBase
+		nEntrada += aParcelas[nCont][2]
+	EndIf
+Next nCont
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Carrega o valor a ser financiado						ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+nFinanciado := 0
+For nCont := 1 TO nParcelas
+	If aParcelas[nCont][1] > dDataBase
+		nFinanciado += Round(aParcelas[nCont][2],2)
+	Endif
+Next nCont
+//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+//ณ Ajuste da ultima parcela (arredondamento)				ณ
+//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+nResto := nLiquido - nTotalParcela
+If (nResto <> 0) .And. Len(aParcelas) >= (nCont-1)
+	aParcelas[nCont-1][2] += nResto
+	
+	//ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+	//ณ Incrementa no valor financiado a diferena       	ณ
+	//ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	If nFinanciado > 0
+		nFinanciado += Round(nResto,2)
+	Endif
+Endif
+
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function PulaLinha()
+nlinha+=50
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+
+Static Function ProxTabela()
+nlinha+=70
+Return
+
+/*
+ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+ฑฑษออออออออออัออออออออออหอออออออัออออออออออออออออออออหออออออัอออออออออออออปฑฑ
+ฑฑบPrograma  ณTMKR03AA  บAutor  ณMicrosiga           บ Data ณ  07/17/14   บฑฑ
+ฑฑฬออออออออออุออออออออออสอออออออฯออออออออออออออออออออสออออออฯอออออออออออออนฑฑ
+ฑฑบDesc.     ณ                                                            บฑฑ
+ฑฑศออออออออออฯออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผฑฑ
+ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+*/
+Static Function QuebraPag()
+If nLinha>=3550
+	nLinha:=0
+	oReport:EndPage()
+	oReport:StartPage()
+Endif
+Return

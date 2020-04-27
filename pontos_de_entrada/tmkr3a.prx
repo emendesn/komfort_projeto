@@ -1,0 +1,57 @@
+#INCLUDE "RWMAKE.CH"
+#INCLUDE "COLORS.CH"
+#INCLUDE "FONT.CH"
+#INCLUDE "TOPCONN.CH"
+#INCLUDE "PROTHEUS.CH"
+
+User Function TMKR3A()
+                        
+Local _lBoleto := .F.       
+Private cOrcamento := SUA->UA_NUM
+                   
+_lBoleto := RetBol()
+
+U_KMORCAMEN(SUA->UA_NUM,_lBoleto,xFilial("SUA"))
+
+Return(.T.)                                
+
+/*/{Protheus.doc} RetQtdChk
+Retorna quantidade de cheques selecionados na forma de pagamento.
+
+@author André Lanzieri
+@since 27/12/2016
+@version 1.0
+/*/              
+
+Static Function RetBol()
+
+Local cQuery	:= ""
+Local cAlias	:= GetNextAlias()
+Local _nRec		:= 0
+Local _cTpBol  := Alltrim(GetMv("KH_TPBOLET",,""))
+Local _lBoleto := .F. 
+
+cQuery += " SELECT L4_FORMA FROM "+RetSqlName("SL4")+" SL4					"
+cQuery += " WHERE SL4.L4_FILIAL = '"+xFilial("SL4")+"' 							"
+cQuery += "	AND SL4.L4_NUM 		= '"+Padr(cORCAMENTO,TamSx3("L4_NUM")[1])+"' 	"
+cQuery += " AND SL4.D_E_L_E_T_ 	<> '*'											"
+
+TCQUERY cQuery NEW ALIAS (cAlias)
+
+(cAlias)->(DbGoTop())
+
+While (cAlias)->(!Eof())
+
+	If AllTrim((cAlias)->L4_FORMA) $ _cTpBol
+		
+		_lBoleto := .T.
+		
+	EndIf		          
+		
+	(cAlias)->(DbSkip())
+	
+EndDo
+			
+(cAlias)->(DbCloseArea())
+
+Return(_lBoleto)
