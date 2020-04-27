@@ -1,0 +1,735 @@
+Group Projeto OFICIAL - Komfort
+   Version=7.0
+   VSSDB=
+   HasProperties=1
+   Properties
+      BeforeApply=
+      AfterApply=
+      Icon=
+      ID=
+      Version=
+      PalmName=
+      OutPut=
+   End
+   ProjectsCount=1
+   Project Alexis
+      FoldersCount=9
+      Folder Pontos de entrada
+         VSSPath=Nova Pasta1
+         FilesCount=73
+         File \my_projects\Pontos de Entrada\A010TOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\F240AFIL.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\FA040B01.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\FA070CA4.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\FA070TIT.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\FC010BTN.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M030INC.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M410ALOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M410PVNF.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M410STTS.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M410VRES.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M440STTS.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M460FIM.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\M460NOTA.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MA030TOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MA410COR.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MA410LEG.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MA410MNU.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MA550NCI.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MS520DEL.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MSD2520.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT103FIM.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT103GET.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT103LDV.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT110VLD.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT120ISC.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT410CPY.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT410TOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT440AT.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT440LIB.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT500ANT.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT500APO.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MT500GRNCC.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA094RO.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA103MNU.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA120G3.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA265E.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA265I.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA265MNU.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA410T.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\MTA440C9.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\OM200ENC.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\OM200QRY.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\OM320GRV.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\OMSA200P.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\SF1100I.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\SIGATMK.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\SYTM01BLQ.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\SYTMKMOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TK271BOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TK271ROTM.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TKGRPED.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMK150EXC.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMK150VLD.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMK273PTC.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKBARLA.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKCBPRO.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKCPG.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKGRAVA.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKMOK.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKR3A.PRX
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVCP.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVDC.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVEX.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVFIM.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVLDEL.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVPA.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVPED.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVPEDI.prw
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\TMKVSL4.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\USF2460I.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\VA006FIM.PRW
+             Type=T
+         End
+         File \my_projects\Pontos de Entrada\VK0900Vl.PRW
+             Type=T
+         End
+      End
+      Folder Call Center
+         VSSPath=Nova Pasta2
+         FilesCount=73
+         File \my_projects\Call Center\A103CALCFRETE.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A103RECALC.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\A120VLD1.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD1.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD2.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD4.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD5.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD7.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLD8.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLDE.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\A273VLDF.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\A410SYMM01.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A410SYMM02.prw
+             Type=T
+         End
+         File \my_projects\Call Center\A410VLD1.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KillLib.prw
+             Type=T
+         End
+         File \my_projects\Call Center\KMLOJA01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMLOJC01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMLOJG02.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMLOJG03.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMORCAMEN.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMPEDIDO.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA02.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA03.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA04.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA05.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA06.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA07.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACA08.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACC01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACR01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMSACR02.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\KMTMKA01.prw
+             Type=T
+         End
+         File \my_projects\Call Center\KMTMKC01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\LANCRA.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTM001.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTM002.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTM006.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV01.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV02.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV03.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV04.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV05.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV06.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV07.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV08.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV09.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV10.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV11.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV12.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV13.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV15.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYTMOV16.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA103.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA104.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA105.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA106.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA107.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA108.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA109.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA110.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA120.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVA130.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVAUX_SYMM.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVM104.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVM105.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVM106.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\SYVM107.prw
+             Type=T
+         End
+         File \my_projects\Call Center\SYVM108.prw
+             Type=T
+         End
+         File \my_projects\Call Center\TMKR03.PRX
+             Type=T
+         End
+         File \my_projects\Call Center\TMKR03AA.PRX
+             Type=T
+         End
+         File \my_projects\Call Center\VLDIGNSU.PRW
+             Type=T
+         End
+         File \my_projects\Call Center\WKFLOJ01.PRW
+             Type=T
+         End
+      End
+      Folder Compras
+         VSSPath=Nova Pasta3
+         FilesCount=21
+         File \my_projects\Compras\A121SYMM01.prw
+             Type=T
+         End
+         File \my_projects\Compras\CAREC001.prw
+             Type=T
+         End
+         File \my_projects\Compras\EXPREL1.PRW
+             Type=T
+         End
+         File \my_projects\Compras\GERACOD.prw
+             Type=T
+         End
+         File \my_projects\Compras\KHSF1DOC.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMC06UPD.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMA01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMA02.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMA03.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMA05.prw
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMA07.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMG01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMCOMR01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMGCVG01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMGCVG02.PRW
+             Type=T
+         End
+         File \my_projects\Compras\KMLOJG01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\libPVdesc.prw
+             Type=T
+         End
+         File \my_projects\Compras\PPPV.PRW
+             Type=T
+         End
+         File \my_projects\Compras\SYTM003.PRW
+             Type=T
+         End
+         File \my_projects\Compras\WKFLOG01.PRW
+             Type=T
+         End
+         File \my_projects\Compras\WKFLOGJ01.PRW
+             Type=T
+         End
+      End
+      Folder DRE
+         VSSPath=Nova Pasta4
+         FilesCount=1
+         File \my_projects\DRE\BINR001.PRW
+             Type=T
+         End
+      End
+      Folder Estoque
+         VSSPath=Nova Pasta5
+         FilesCount=9
+         File \my_projects\Estoque\EtiPPalet.prw
+             Type=T
+         End
+         File \my_projects\Estoque\fmata290.prw
+             Type=T
+         End
+         File \my_projects\Estoque\KFHETIQU.prw
+             Type=T
+         End
+         File \my_projects\Estoque\KMESTA01.prw
+             Type=T
+         End
+         File \my_projects\Estoque\KMESTA02.prw
+             Type=T
+         End
+         File \my_projects\Estoque\KMESTR01.PRW
+             Type=T
+         End
+         File \my_projects\Estoque\KMESTX01.prw
+             Type=T
+         End
+         File \my_projects\Estoque\KMESTX02.PRW
+             Type=T
+         End
+         File \my_projects\Estoque\KMHIMPETQ.PRW
+             Type=T
+         End
+      End
+      Folder Faturamento_Fiscal
+         VSSPath=Nova Pasta6
+         FilesCount=10
+         File \my_projects\Faturamento_Fiscal\danfeii.prw
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\danfeiii.prw
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\FISTRFNFE.prw
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\KMFATA01.PRW
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\KMFATF01.PRW
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\KMFATG01.PRW
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\KMFATG02.prw
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\KMFATR01.PRW
+             Type=T
+         End
+         File \my_projects\Faturamento_Fiscal\nfesefaz.prw
+             Type=T
+         End
+         File \my_projects\FATURAMENTO_FISCAL\KMFISF01.PRW
+             Type=T
+         End
+      End
+      Folder Financeiro
+         VSSPath=Nova Pasta7
+         FilesCount=15
+         File \my_projects\Financeiro\ALTFRMPG.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KFINR170.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMATR140.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINA01.prw
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR01.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR02.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR03.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR04.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR05.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR06.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\KMFINR07.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\SYTM007.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\SYTMOV14.PRW
+             Type=T
+         End
+         File \my_projects\Financeiro\TiraCR.prw
+             Type=T
+         End
+         File \my_projects\Financeiro\TITNCC45.PRW
+             Type=T
+         End
+      End
+      Folder Gestao XML
+         VSSPath=Nova Pasta8
+         FilesCount=10
+         File \my_projects\Gestão de XML\SYXMLA01.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA02.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA03.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA04.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA05.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA06.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA07.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA08.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA09.PRW
+             Type=T
+         End
+         File \my_projects\Gestão de XML\SYXMLA10.PRW
+             Type=T
+         End
+      End
+      Folder Funçoes
+         VSSPath=Nova Pasta9
+         FilesCount=15
+         File \my_projects\Funções\ATUDA1.PRW
+             Type=T
+         End
+         File \my_projects\Funções\kfhvldcpo.prw
+             Type=T
+         End
+         File \my_projects\Funções\KHF3B1.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KHMXFUN.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KMCFGA01.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KMCFGA02.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KMCFGA03.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KMFRA01.prw
+             Type=T
+         End
+         File \my_projects\Funções\KMFRA02.prw
+             Type=T
+         End
+         File \my_projects\Funções\KMFRA03.prw
+             Type=T
+         End
+         File \my_projects\Funções\KMFRX01.PRW
+             Type=T
+         End
+         File \my_projects\Funções\KMQGX01.prw
+             Type=T
+         End
+         File \my_projects\Funções\RetParc.prw
+             Type=T
+         End
+         File \my_projects\Funções\tiraDV.prw
+             Type=T
+         End
+         File \my_projects\Funções\KGBI005.prw
+             Type=T
+         End
+      End
+   End
+End
