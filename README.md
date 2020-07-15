@@ -1,2 +1,4 @@
-# komfort_projeto
-06-04-2020 - atualizacao a partir do repositorio oficial
+![GitHub repo size](https://img.shields.io/github/repo-size/emendesn/komfort_projeto)
+![GitHub](https://img.shields.io/github/license/emendesn/komfort_projeto)
+# Projeto Komfort
+  - protheus 12
